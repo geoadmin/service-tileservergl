@@ -1,5 +1,13 @@
 version: '2'
 services:
+  nginx:
+    start_on_create: true
+    health_check:
+      port: 8134
+      interval: 3000
+      request_line: GET /checker HTTP/1.0
+      unhealthy_threshold: 2
+      strategy: recreate
   tileserver-gl:
     start_on_create: true
     health_check:
