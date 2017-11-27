@@ -1,0 +1,28 @@
+version: '2'
+services:
+  tileserver-gl:
+    image: swisstopo/tileserver-gl:latest
+% if rancher_deploy == 'false':
+    build: tileserver-gl/
+% endif
+    ports:
+    - '8135:8135'
+    command:
+    - xvfb-run
+    - -a -e
+    - /dev/stdout
+    - --server-args="-screen 0 1024x768x24"
+    - node
+    - /usr/src/app/
+    - -p
+    - '8135'
+    - -c
+    - /usr/src/app/tileserver-gl-config.json
+    volumes:
+    - /var/local/efs-dev/vector-forge:/var/local/efs-dev/vector-forge
+    network_mode: 'host'
+    labels:
+      #io.rancher.scheduler.affinity:host_label: application=general,staging=dev
+      io.rancher.scheduler.affinity:host_label: application=tod,staging=dev
+      io.rancher.container.pull_image: always
+      io.rancher.scheduler.global: 'true'

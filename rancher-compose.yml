@@ -1,0 +1,10 @@
+version: '2'
+services:
+  tileserver-gl:
+    start_on_create: true
+    health_check:
+      port: 8135
+      interval: 5000
+      unhealthy_threshold: 2
+      strategy: recreate
+      request_line: GET /health HTTP/1.0
