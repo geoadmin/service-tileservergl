@@ -7,7 +7,7 @@ PIP_CMD = ${INSTALL_DIR}/bin/pip
 
 .PHONY: user
 user:
-	@if [ ! -d  ${INSTALL_DIR} ]; then virtualenv ${INSTALL_DIR}; fi
+	@if [ ! -d  ${INSTALL_DIR} ]; then virtualenv ${INSTALL_DIR} && git submodule update; fi
 	${PIP_CMD} install Mako
 
 .PHONY: dockerbuild
