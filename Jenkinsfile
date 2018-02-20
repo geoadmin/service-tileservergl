@@ -4,6 +4,7 @@ final IMAGE_BASE_NAME = 'swisstopo/service-tileservergl'
 final IMAGE_TAG = 'staging'
 
 node(label: "jenkins-slave") {
+  final deployGitBranch = env.BRANCH_NAME
   try {
     stage("Checkout") {
       sh 'echo Checking out code from github'
