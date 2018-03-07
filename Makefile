@@ -5,6 +5,17 @@ MAKO_CMD = ${INSTALL_DIR}/bin/mako-render
 PIP_CMD = ${INSTALL_DIR}/bin/pip
 
 
+.PHONY: help
+help:
+	@echo ""
+	@echo "- user                 Install the project"
+	@echo "- dockerbuild          Builds all images via docker-compose"
+	@echo "- dockerrun            Launches all the containers for the service"
+	@echo "- rancherdeploydev     Deploys the app to Rancher"
+	@echo "- clean                Remove generated templates"
+	@echo "- cleanall             Remove all build artefacts"
+	@echo ""
+
 .PHONY: user
 user:
 	@if [ ! -d  ${INSTALL_DIR} ]; then virtualenv ${INSTALL_DIR} && git submodule init && git submodule update; fi
@@ -46,3 +57,4 @@ clean:
 .PHONY: cleanall
 cleanall: clean
 	rm -rf ${INSTALL_DIR}
+	rm -rf node_modules
