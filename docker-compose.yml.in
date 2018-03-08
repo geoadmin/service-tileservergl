@@ -28,7 +28,8 @@ services:
     - '8135:8135'
     command:
     - xvfb-run
-    - -a -e
+    - -a
+    - -e
     - /dev/stdout
     - --server-args="-screen 0 1024x768x24"
     - node
