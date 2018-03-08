@@ -1,8 +1,10 @@
 SHELL = /bin/bash
 
-INSTALL_DIR = .venv
-MAKO_CMD = ${INSTALL_DIR}/bin/mako-render
-PIP_CMD = ${INSTALL_DIR}/bin/pip
+PYTHON_DIR = .venv
+NODE_DIR = node_modules
+SUBMODULE_DIR = tileserver-gl
+MAKO_CMD = ${PYTHON_DIR}/bin/mako-render
+PIP_CMD = ${PYTHON_DIR}/bin/pip
 
 
 .PHONY: help
@@ -18,7 +20,9 @@ help:
 
 .PHONY: user
 user:
-	@if [ ! -d  ${INSTALL_DIR} ]; then virtualenv ${INSTALL_DIR} && git submodule init && git submodule update; fi
+	@if [ ! -d  ${PYTHON_DIR} ]; then virtualenv ${PYTHON_DIR}; fi
+	@if [ ! -d  ${NODE_DIR} ]; then npm install; fi
+	@if [ ! -d  ${SUBMODULE_DIR} ]; then git submodule init && git submodule update; fi
 	${PIP_CMD} install Mako
 
 .PHONY: dockerbuild
@@ -56,5 +60,5 @@ clean:
 
 .PHONY: cleanall
 cleanall: clean
-	rm -rf ${INSTALL_DIR}
-	rm -rf node_modules
+	rm -rf ${PYTHON_DIR}
+	rm -rf ${NODE_DIR}
