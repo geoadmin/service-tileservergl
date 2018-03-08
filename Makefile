@@ -40,6 +40,19 @@ rancherdeploydev: guard-RANCHER_ACCESS_KEY \
 	export RANCHER_DEPLOY=true && make docker-compose.yml
 	$(call start_service,$(RANCHER_ACCESS_KEY),$(RANCHER_SECRET_KEY),$(RANCHER_URL),dev)
 
+.PHONY: dockerpurge
+dockerpurge:
+	@if test "$(shell sudo docker ps -a -q)" != ""; then \
+		sudo docker rm -f $(shell sudo docker ps -a -q); \
+	else \
+		echo "No container was found"; \
+	fi
+	@if test "$(shell sudo docker images -q)" != ""; then \
+		sudo docker rmi -f $(shell sudo docker images -q); \
+	else \
+		echo "No image was found"; \
+	fi
+
 docker-compose.yml::
 	${MAKO_CMD} --var "rancher_deploy=$(RANCHER_DEPLOY)" docker-compose.yml.in > $@
 
