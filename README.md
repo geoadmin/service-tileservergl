@@ -133,6 +133,9 @@ Edit `tileserver-gl/tileserver-gl-config.json` and add a new entry in data. (dat
 ...
 ```
 
+- `boundaries-test` is the id of the data `${dataID}`
+- `boundaries.mbtiles` is the name of the mbtiles file
+
 #### 3 Test the new server configuration locally
 
 Make sure you created a SSH tunnel via the `-L localhost:8135:localhost:8135` option.
@@ -143,6 +146,54 @@ Then create the docker containers locally via
 make dockerpurge dockerrun
 ```
 
-Open your browser at `localhost:8135`. In the section data you should now see the `boundaries` entry.
+Open your browser at `localhost:8135`. In the section **DATA** you should now see the `boundaries` entry.
 
 You can collect metdata about the tileset using the following REST endpoint: `/data/boundaries-test.json` (`/data/${dataID}.json`)
+
+### Publish a new style in tileserver-gl
+
+#### 1 Add a new style entry in tileserver-gl
+
+Styles are base on [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-js/style-spec/)
+
+Insert a new entry in "styles" in `tileserver-gl/tileserver-gl-config.json`.
+
+```json
+...
+  "styles": {
+    "boundaries-test": {
+      "style": "boundaries_style.json",
+      "server_rendered": true,
+      "tilejson": {
+        "bounds": [
+          6,
+          43,
+          11,
+          51
+        ]
+      }
+...
+```
+
+- `boundaries-test` is the id of the style `${styleID}`
+- `style` is the name of the style file
+- `server_rendered` is the option that lets you turn on/off the backend rasterization.
+- `bounds` tells tileserver-gl what initial bounds you want to use.
+
+#### 2 Add a new style file to EFS
+
+For demonstration purposes a simple style is provided in `sample/boundaries_style.json`.
+
+```bash
+scp sample/boundaries_style.json geodata@${SERVER}:/var/local/efs-dev/vector-forge/swisstopo-styles
+```
+
+#### 3 Test the new server configuration locally
+
+```bash
+make dockerpurge dockerrun
+```
+
+Open your browser at `localhost:8135`. In the section **STYLES** you should now see the `Test Swiss Boundaries` entry.
+
+You can access the new style using the following REST endpoint: `/styles/boundaries-test/style.json` (`/styles/${styleID}/style.json`)
