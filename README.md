@@ -23,16 +23,16 @@ $ git submodule init && git submodule update
 ####  Install dependencies
 
 ```bash
-sudo apt-get install build-essential libsqlite3-dev zlib1g-dev
+$ sudo apt-get install build-essential libsqlite3-dev zlib1g-dev
 ```
 
 #### Compile tippecanoe
 
 ```bash
-cd $HOME
-git clone git@github.com:geoadmin/tippecanoe.git
-cd tippecanoe
-make
+$ cd $HOME
+$ git clone git@github.com:geoadmin/tippecanoe.git
+$ cd tippecanoe
+$ make
 ```
 
 ### Create a new tileset
@@ -81,13 +81,13 @@ Usage:
 --tilesetname    File pattern for output files [default: composite]
 
 Usage example:
-./scripts/process-tilesets.sh --inputs="data/tiles/base.json data/tiles/adds.json" --outputpath=data/tiles --tilesetname=composite
+$ ./scripts/process-tilesets.sh --inputs="data/tiles/base.json data/tiles/adds.json" --outputpath=data/tiles --tilesetname=composite
 ```
 
 Now try:
 
 ```bash
-./scripts/process-tilesets.sh --inputs="sample/swissboundaries_gemeinde_3857.json" --outputpath=sample --tilesetname=boundaries
+$ ./scripts/process-tilesets.sh --inputs="sample/swissboundaries_gemeinde_3857.json" --outputpath=sample --tilesetname=boundaries
 ```
 
 This will create 3 files.
@@ -111,13 +111,13 @@ Composite MBTile: sample/boundaries.mbtiles
 Make sure your ssh identity has been forwarded.
 
 ```bash
-ssh-add -L
+$ ssh-add -L
 ```
 
 Add the newly created tileset to [EFS](https://aws.amazon.com/efs/?nc1=h_ls).
 
 ```bash
-scp sample/boundaries.mbtiles geodata@${SERVER}:/var/local/efs-dev/vector-forge/swisstopo-tiles
+$ scp sample/boundaries.mbtiles geodata@${SERVER}:/var/local/efs-dev/vector-forge/swisstopo-tiles
 ```
 
 #### 2 Add the new tileset in tileserver-gl
@@ -143,7 +143,7 @@ Make sure you created a SSH tunnel via the `-L localhost:8135:localhost:8135` op
 Then create the docker containers locally via
 
 ```bash
-make dockerpurge dockerrun
+$ make dockerpurge dockerrun
 ```
 
 Open your browser at `localhost:8135`. In the section **DATA** you should now see the `boundaries` entry.
@@ -185,15 +185,23 @@ Insert a new entry in "styles" in `tileserver-gl/tileserver-gl-config.json`.
 For demonstration purposes a simple style is provided in `sample/boundaries_style.json`.
 
 ```bash
-scp sample/boundaries_style.json geodata@${SERVER}:/var/local/efs-dev/vector-forge/swisstopo-styles
+$ scp sample/boundaries_style.json geodata@${SERVER}:/var/local/efs-dev/vector-forge/swisstopo-styles
 ```
 
 #### 3 Test the new server configuration locally
 
 ```bash
-make dockerpurge dockerrun
+$ make dockerpurge dockerrun
 ```
 
 Open your browser at `localhost:8135`. In the section **STYLES** you should now see the `Test Swiss Boundaries` entry.
 
 You can access the new style using the following REST endpoint: `/styles/boundaries-test/style.json` (`/styles/${styleID}/style.json`)
+
+**Tip**: when you just want to update a GL style and containers are already running.
+
+```bash
+$ scp sample/boundaries_style.json geodata@${SERVER}:/var/local/efs-dev/vector-forge/swisstopo-styles
+$ docker-compose down
+$ docker-compose up -d
+```
