@@ -39,13 +39,13 @@ rancherdeploydev: guard-RANCHER_ACCESS_KEY \
 
 .PHONY: dockerpurge
 dockerpurge:
-	@if test "$(shell sudo docker ps -a -q --filter name=servicetileservergl)" != ""; then \
+	@if test "$(shell docker ps -a -q --filter name=servicetileservergl)" != ""; then \
 		sudo docker rm -f $(shell sudo docker ps -a -q --filter name=servicetileservergl); \
 	fi
-	@if test "$(shell sudo docker images -q swisstopo/tileserver-gl)" != ""; then \
+	@if test "$(shell docker images -q swisstopo/tileserver-gl)" != ""; then \
 		sudo docker rmi -f swisstopo/tileserver-gl; \
 	fi
-	@if test "$(shell sudo docker images -q swisstopo/nginx-tileserver-gl)" != ""; then \
+	@if test "$(shell docker images -q swisstopo/nginx-tileserver-gl)" != ""; then \
 		sudo docker rmi -f swisstopo/nginx-tileserver-gl; \
 	fi
 
