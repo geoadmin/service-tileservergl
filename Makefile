@@ -13,6 +13,7 @@ help:
 	@echo "- user                 Install the project"
 	@echo "- dockerbuild          Builds all images via docker-compose"
 	@echo "- dockerrun            Launches all the containers for the service"
+	@echo "- dockerpurge          Remove all docker related docker containers and images"
 	@echo "- rancherdeploydev     Deploys the app to Rancher"
 	@echo "- clean                Remove generated templates"
 	@echo "- cleanall             Remove all build artefacts"
