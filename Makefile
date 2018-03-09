@@ -42,15 +42,14 @@ rancherdeploydev: guard-RANCHER_ACCESS_KEY \
 
 .PHONY: dockerpurge
 dockerpurge:
-	@if test "$(shell sudo docker ps -a -q)" != ""; then \
-		sudo docker rm -f $(shell sudo docker ps -a -q); \
-	else \
-		echo "No container was found"; \
+	@if test "$(shell sudo docker ps -a -q --filter name=servicetileservergl)" != ""; then \
+		sudo docker rm -f $(shell sudo docker ps -a -q --filter name=servicetileservergl); \
 	fi
-	@if test "$(shell sudo docker images -q)" != ""; then \
-		sudo docker rmi -f $(shell sudo docker images -q); \
-	else \
-		echo "No image was found"; \
+	@if test "$(shell sudo docker images -q swisstopo/tileserver-gl)" != ""; then \
+		sudo docker rmi -f swisstopo/tileserver-gl; \
+	fi
+	@if test "$(shell sudo docker images -q swisstopo/nginx-tileserver-gl)" != ""; then \
+		sudo docker rmi -f swisstopo/nginx-tileserver-gl; \
 	fi
 
 docker-compose.yml::
