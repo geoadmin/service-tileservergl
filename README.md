@@ -23,7 +23,7 @@ $ git submodule init && git submodule update
 ####  Install dependencies
 
 ```bash
-$ sudo apt-get install build-essential libsqlite3-dev zlib1g-dev python-virtualenv npm
+$ sudo apt-get install build-essential libsqlite3-dev zlib1g-dev python-virtualenv npm docker-compose
 ```
 
 #### Compile tippecanoe
