@@ -13,17 +13,14 @@ help:
 	@echo "- user                 Install the project"
 	@echo "- dockerbuild          Builds all images via docker-compose"
 	@echo "- dockerrun            Launches all the containers for the service"
+	@echo "- dockerpurge          Remove all docker related docker containers and images"
 	@echo "- rancherdeploydev     Deploys the app to Rancher"
 	@echo "- clean                Remove generated templates"
 	@echo "- cleanall             Remove all build artefacts"
 	@echo ""
 
 .PHONY: user
-user:
-	@if [ ! -d  ${PYTHON_DIR} ]; then virtualenv ${PYTHON_DIR}; fi
-	@if [ ! -d  ${NODE_DIR} ]; then npm install; fi
-	@if [ ! -d  ${SUBMODULE_DIR} ]; then git submodule init && git submodule update; fi
-	${PIP_CMD} install Mako
+user: ${PYTHON_DIR}/requirements.timestamp ${NODE_DIR}/package.timestamp
 
 .PHONY: dockerbuild
 dockerbuild:
@@ -42,16 +39,26 @@ rancherdeploydev: guard-RANCHER_ACCESS_KEY \
 
 .PHONY: dockerpurge
 dockerpurge:
-	@if test "$(shell sudo docker ps -a -q)" != ""; then \
-		sudo docker rm -f $(shell sudo docker ps -a -q); \
-	else \
-		echo "No container was found"; \
+	@if test "$(shell docker ps -a -q --filter name=servicetileservergl)" != ""; then \
+		sudo docker rm -f $(shell sudo docker ps -a -q --filter name=servicetileservergl); \
 	fi
-	@if test "$(shell sudo docker images -q)" != ""; then \
-		sudo docker rmi -f $(shell sudo docker images -q); \
-	else \
-		echo "No image was found"; \
+	@if test "$(shell docker images -q swisstopo/tileserver-gl)" != ""; then \
+		sudo docker rmi -f swisstopo/tileserver-gl; \
 	fi
+	@if test "$(shell docker images -q swisstopo/nginx-tileserver-gl)" != ""; then \
+		sudo docker rmi -f swisstopo/nginx-tileserver-gl; \
+	fi
+
+${PYTHON_DIR}:
+	virtualenv ${PYTHON_DIR}
+
+${PYTHON_DIR}/requirements.timestamp: ${PYTHON_DIR} requirements.txt
+	${PIP_CMD} install -r requirements.txt
+	touch $@
+
+${NODE_DIR}/package.timestamp: package.json
+	npm install
+	touch $@
 
 docker-compose.yml::
 	${MAKO_CMD} --var "rancher_deploy=$(RANCHER_DEPLOY)" docker-compose.yml.in > $@

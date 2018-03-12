@@ -7,7 +7,7 @@ let MAXZOOM=15
 let MINZOOM=6
 INPUT_LIST=""
 OUTPUT_PATH='.'
-FILEPATTERN='composite'
+TILESETNAME='composite'
 
 function usage {
   echo "Usage:"
@@ -17,13 +17,13 @@ function usage {
   echo -e "--minzoom \t Minimum zoom level to generate tiles [default:6]"
   echo -e "--inputs \t List of input files [default:\"${INPUT_LIST}\"]"
   echo -e "--outputpath \t Directory for output files [default: ${OUTPUT_PATH}]"
-  echo -e "--filepattern \t File pattern for output files [default: ${FILEPATTERN}]"
+  echo -e "--tilesetname \t File pattern for output files [default: ${TILESETNAME}]"
   echo
   echo "Usage example:"
-  echo "./process-tilesets.sh \
+  echo "./scripts/process-tilesets.sh \
 --inputs=\"data/tiles/base.json data/tiles/adds.json\" \
 --outputpath=data/tiles \
---filepattern=composite"
+--tilesetname=composite"
 }
 
 
@@ -47,8 +47,8 @@ while [ "${1}" != "" ]; do
         --outputpath)
             OUTPUT_PATH=${VALUE}
             ;;
-        --filepattern)
-            eval FILEPATTERN=${VALUE}
+        --tilesetname)
+            eval TILESETNAME=${VALUE}
             ;;
         *)
             echo "ERROR: unknown parameter \"${PARAM}\""
@@ -78,7 +78,7 @@ else
   done
 fi
 
-OUTPUT=${OUTPUT_PATH}/${FILEPATTERN}
+OUTPUT=${OUTPUT_PATH}/${TILESETNAME}
 OUTPUT_JSON=${OUTPUT}.geojson
 OUTPUT_MODIFIED=${OUTPUT}_modified.geojson
 OUTPUT_MBTILE=${OUTPUT}.mbtiles
@@ -90,7 +90,7 @@ echo Modified JSON: ${OUTPUT_MODIFIED}
 echo Composite MBTile: ${OUTPUT_MBTILE}
 
 # Write header of GeoJSON
-echo "{\"name\":\"${FILEPATTERN}\",\"type\":\"FeatureCollection\"" > ${OUTPUT_JSON}
+echo "{\"name\":\"${TILESETNAME}\",\"type\":\"FeatureCollection\"" > ${OUTPUT_JSON}
 echo ',"crs":{"type":"name","properties":{"name":"EPSG:3857"}}' >> ${OUTPUT_JSON}
 echo ',"features":[' >> ${OUTPUT_JSON}
 
@@ -115,7 +115,7 @@ echo Number of features in composite: ${n}
 
 echo Adding tippecanoe extension...
 set -o xtrace
-node ${HOME}/vector-forge/scripts/geojson-modifier.js \
+node scripts/geojson-modifier.js \
     --infile ${OUTPUT_JSON} \
     --tippecanoe_extensions '[{ "maxzoom": "maxzoom", "minzoom": "minzoom"}]' \
     --maxzoom_limit ${MINZOOM} \
@@ -130,8 +130,8 @@ ${HOME}/tippecanoe/tippecanoe -f \
     --maximum-zoom=${MAXZOOM} \
     --minimum-zoom=${MINZOOM} \
     --projection EPSG:3857 \
-    -n ${FILEPATTERN} -l ${FILEPATTERN}-layer \
-    --description='Composite Tileset' \
+    -n ${TILESETNAME} -l ${TILESETNAME}-layer \
+    --description=${TILESETNAME}-description \
     ${OUTPUT_MODIFIED}
 set +o xtrace
 
