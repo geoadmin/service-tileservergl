@@ -3,7 +3,7 @@
 ## Setting up
 
 ```bash
-$ git clone --recurse-submodules -j8 git@github.com:geoadmin/service-tileservergl.git
+$ git clone --recurse-submodules git@github.com:geoadmin/service-tileservergl.git
 $ cd service-tileservergl
 $ make user
 ```
