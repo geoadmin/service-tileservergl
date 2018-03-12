@@ -1,4 +1,4 @@
-# service-tileservergl
+ # service-tileservergl
 
 ## Setting up
 
@@ -23,7 +23,7 @@ $ git submodule init && git submodule update
 ####  Install dependencies
 
 ```bash
-$ sudo apt-get install build-essential libsqlite3-dev zlib1g-dev
+$ sudo apt-get install build-essential libsqlite3-dev zlib1g-dev python-virtualenv npm
 ```
 
 #### Compile tippecanoe
