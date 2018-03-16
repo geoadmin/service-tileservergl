@@ -9,15 +9,18 @@ events {
 }
 
 http {
+  include mime.types;
   default_type application/octet-stream;
   sendfile off;
 
   server {
     listen 8134 default_server;
-    root ${maputnik_root};
-    index index.html;
     location /maputnik {
-      try_files $uri $uri/ index.html;
+      default_type "text/html";
+      alias ${maputnik_root}/index.html;
+    }
+    location /maputnik/ {
+      alias ${maputnik_root}/;
     }
     location /checker {
       access_log   off;

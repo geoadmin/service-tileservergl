@@ -6,6 +6,6 @@ RUN pip install Mako==1.0.7
 RUN rm /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 COPY nginx.conf.in /etc/nginx/nginx.conf.in
 COPY docker-entrypoint.sh /docker-entrypoint.sh
-COPY maputnik-editor /usr/src/maputnik-editor
-ENV MAPUTNIK_ROOT=/usr/src/maputnik-editor/public
+COPY maputnik /usr/src/maputnik
+ENV MAPUTNIK_ROOT=/usr/src/maputnik
 ENTRYPOINT ["/docker-entrypoint.sh"]
