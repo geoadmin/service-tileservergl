@@ -205,3 +205,24 @@ $ scp sample/boundaries_style.json geodata@${SERVER}:/var/local/efs-dev/vector-f
 $ docker-compose down
 $ docker-compose up -d
 ```
+
+## Update Maputnik
+
+```bash
+$ git clone git@github.com:maputnik/editor.git
+$ cd editor
+$ npm run build
+$ mv pulic $HOME/service-tileservergl/nginx/maputnik
+```
+
+Change the base
+
+```bash
+$ vi nginx/maputnik/index.html
+```
+
+Add the following line in the head section.
+
+```html
+<base href="/maputnik/">
+```

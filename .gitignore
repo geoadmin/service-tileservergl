@@ -2,6 +2,7 @@
 node_modules
 docker-compose.yml
 .venv
+nginx/nginx.conf
 sample/boundaries.geojson
 sample/boundaries.mbtiles
 sample/boundaries_modified.geojson
