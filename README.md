@@ -211,6 +211,7 @@ $ docker-compose up -d
 ```bash
 $ git clone git@github.com:maputnik/editor.git
 $ cd editor
+$ npm install
 $ npm run build
 $ mv pulic $HOME/service-tileservergl/nginx/maputnik
 ```
