@@ -1,5 +1,9 @@
 SHELL = /bin/bash
 
+CI ?= false
+RANCHER_DEPLOY ?= false
+IMAGE_TAG ?= staging
+
 CURRENT_DIR = $(shell pwd)
 PYTHON_DIR = .venv
 NODE_DIR = node_modules
@@ -63,10 +67,10 @@ ${NODE_DIR}/package.timestamp: package.json
 	touch $@
 
 docker-compose.yml::
-	${MAKO_CMD} --var "rancher_deploy=$(RANCHER_DEPLOY)" docker-compose.yml.in > $@
+	source rc_user && ${MAKO_CMD} --var "rancher_deploy=${RANCHER_DEPLOY}" --var "ci=${CI}" --var "image_tag=${IMAGE_TAG}" docker-compose.yml.in > $@
 
 nginx/nginx.conf::
-	${MAKO_CMD} --var "maputnik_root=$(MAPUTNIK_ROOT)" nginx/nginx.conf.in > $@
+	source rc_user && ${MAKO_CMD} --var "maputnik_root=${MAPUTNIK_ROOT}" nginx/nginx.conf.in > $@
 
 define start_service
 	rancher --access-key $1 --secret-key $2 --url $3 rm --stop --type stack service-tileservergl-$4 || echo "Nothing to remove"
