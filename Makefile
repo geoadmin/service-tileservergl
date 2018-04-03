@@ -49,10 +49,10 @@ dockerpurge:
 		sudo docker rm -f $(shell sudo docker ps -a -q --filter name=servicetileservergl); \
 	fi
 	@if test "$(shell docker images -q swisstopo/tileserver-gl)" != ""; then \
-		sudo docker rmi -f swisstopo/tileserver-gl; \
+		sudo docker rmi -f swisstopo/tileserver-gl:staging; \
 	fi
 	@if test "$(shell docker images -q swisstopo/nginx-tileserver-gl)" != ""; then \
-		sudo docker rmi -f swisstopo/nginx-tileserver-gl; \
+		sudo docker rmi -f swisstopo/nginx-tileserver-gl:staging; \
 	fi
 
 ${PYTHON_DIR}:

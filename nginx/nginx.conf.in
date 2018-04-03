@@ -12,9 +12,12 @@ http {
   include mime.types;
   default_type application/octet-stream;
   sendfile off;
+  # this removes the "host_header" related issue
+  underscores_in_headers on;
 
   server {
     listen 8134 default_server;
+
     location /maputnik {
       default_type "text/html";
       alias ${maputnik_root}/index.html;
