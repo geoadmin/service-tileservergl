@@ -40,6 +40,7 @@ services:
     - '8135'
     - -c
     - /usr/src/app/tileserver-gl-config.json
+    - -l
     volumes:
     - /var/local/efs-dev/vector-forge:/var/local/efs-dev/vector-forge
 % if ci == 'false':
