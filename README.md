@@ -24,6 +24,9 @@ $ git submodule init && git submodule update
 
 ```bash
 $ sudo apt-get install build-essential libsqlite3-dev zlib1g-dev python-virtualenv npm docker-compose
+// The current version of geoadmin/tippecanoe needs gcc 4
+$ sudo apt-get install gcc-4.8 g++-4.8
+$ export CXX=g++-4.8
 ```
 
 #### Compile tippecanoe
