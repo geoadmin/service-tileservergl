@@ -212,11 +212,13 @@ $ docker-compose up -d
 ## Update Maputnik
 
 ```bash
+$ cd ~
 $ git clone git@github.com:maputnik/editor.git
 $ cd editor
 $ npm install
 $ npm run build
-$ mv pulic $HOME/service-tileservergl/nginx/maputnik
+$ rm -rf  ~/service-tileservergl/nginx/maputnik
+$ mv public ~/service-tileservergl/nginx/maputnik
 ```
 
 Change the base
