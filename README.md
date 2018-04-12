@@ -141,7 +141,7 @@ Edit `tileserver-gl/tileserver-gl-config.json` and add a new entry in data. (dat
 
 #### 3 Test the new server configuration locally
 
-Make sure you created a SSH tunnel via the `-L localhost:8135:localhost:8135` option.
+Make sure you created a SSH tunnel via the `-L localhost:8134:localhost:8134` option.
 
 Then create the docker containers locally via
 
@@ -149,7 +149,7 @@ Then create the docker containers locally via
 $ make dockerpurge dockerrun
 ```
 
-Open your browser at `localhost:8135`. In the section **DATA** you should now see the `boundaries` entry.
+Open your browser at `localhost:8134`. In the section **DATA** you should now see the `boundaries` entry.
 
 You can collect metdata about the tileset using the following REST endpoint: `/data/boundaries-test.json` (`/data/${dataID}.json`)
 
@@ -231,4 +231,10 @@ Add the following line in the head section.
 
 ```html
 <base href="/maputnik/">
+```
+
+Re-run the server then open your browser to http://localhost:8134/maputnik
+
+```bash
+$ make dockerpurge dockerrun
 ```
