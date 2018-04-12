@@ -29,11 +29,11 @@ help:
 user: ${PYTHON_DIR}/requirements.timestamp ${NODE_DIR}/package.timestamp
 
 .PHONY: dockerbuild
-dockerbuild: nginx/nginx.conf
+dockerbuild:
 	export RANCHER_DEPLOY=false && make docker-compose.yml && docker-compose build
 
 .PHONY: dockerrun
-dockerrun: nginx/nginx.conf
+dockerrun:
 	export RANCHER_DEPLOY=false && make docker-compose.yml && docker-compose up -d
 
 .PHONY: rancherdeploydev
