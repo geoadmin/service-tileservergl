@@ -12,6 +12,12 @@ MAPUTNIK_ROOT = ${CURRENT_DIR}/maputnik-editor
 MAKO_CMD = ${PYTHON_DIR}/bin/mako-render
 PIP_CMD = ${PYTHON_DIR}/bin/pip
 
+# Proxy variables
+# On our ubuntu machine only the ip of the proxy works, not the dns name
+HTTP_PROXY_IP ?=
+ifneq ($(http_proxy),)
+  HTTP_PROXY_IP := http://$(shell echo $(http_proxy) | sed -e "s/[^/]*\/\/\([^@]*@\)\?\([^:/]*\).*/\2/" | nslookup | grep Address | tail -1 | awk '{print $$2}'):8080
+endif
 
 .PHONY: help
 help:
@@ -24,13 +30,16 @@ help:
 	@echo "- clean                Remove generated templates"
 	@echo "- cleanall             Remove all build artefacts"
 	@echo ""
+	@echo "Variables defined:"
+	@echo "  HTTP_PROXY_IP = ${HTTP_PROXY_IP}"
+	@echo ""
 
 .PHONY: user
 user: ${PYTHON_DIR}/requirements.timestamp ${NODE_DIR}/package.timestamp
 
 .PHONY: dockerbuild
 dockerbuild:
-	export RANCHER_DEPLOY=false && make docker-compose.yml && docker-compose build
+	export RANCHER_DEPLOY=false && make docker-compose.yml && docker-compose build --build-arg https_proxy=$(HTTP_PROXY_IP) --build-arg http_proxy=$(HTTP_PROXY_IP)
 
 .PHONY: dockerrun
 dockerrun:
