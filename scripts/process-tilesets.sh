@@ -115,7 +115,7 @@ echo Number of features in composite: ${n}
 
 echo Adding tippecanoe extension...
 set -o xtrace
-node scripts/geojson-modifier.js \
+nodejs scripts/geojson-modifier.js \
     --infile ${OUTPUT_JSON} \
     --tippecanoe_extensions '[{ "maxzoom": "maxzoom", "minzoom": "minzoom"}]' \
     --maxzoom_limit ${MINZOOM} \
