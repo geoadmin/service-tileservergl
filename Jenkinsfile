@@ -61,8 +61,8 @@ node(label: "jenkins-slave") {
     withEnv(["IMAGE_TAG=${IMAGE_TAG}", "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME}"]) {
       stage("Clean") {
         sh 'docker-compose down -v || echo Skipping'
-        sh "docker rmi ${IMAGE_BASE_NAME}:${IMAGE_TAG} || echo Skipping"
-        sh "docker rmi ${IMAGE_BASE_NAME_TILESERVERGL}:staging || echo Skipping"
+        sh "docker rmi ${IMAGE_BASE_NAME}:${IMAGE_TAG} -f || echo Skipping"
+        sh "docker rmi ${IMAGE_BASE_NAME_TILESERVERGL}:staging -f || echo Skipping"
         sh 'git clean -dx --force'
         sh 'docker ps'
         sh 'docker ps --all --filter status=exited'
