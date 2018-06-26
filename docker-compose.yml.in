@@ -43,7 +43,7 @@ services:
     - -l
     - -s
     volumes:
-    - /var/local/efs-dev/vector-forge:/var/local/efs-dev/vector-forge
+    - /var/local/efs-dev/vectortiles:/var/local/efs-dev/vectortiles
 % if ci == 'false':
     network_mode: 'host'
 % endif
