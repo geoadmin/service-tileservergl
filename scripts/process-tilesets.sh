@@ -78,7 +78,10 @@ else
   done
 fi
 
-OUTPUT=${OUTPUT_PATH}/${TILESETNAME}
+EXECUTION_TIMESTAMP="$(date +%s)"
+OUTPUT_DIR=${OUTPUT_PATH}/${TILESETNAME}/${EXECUTION_TIMESTAMP}
+mkdir -p $OUTPUT_DIR
+OUTPUT=${OUTPUT_DIR}/tiles
 OUTPUT_JSON=${OUTPUT}.geojson
 OUTPUT_MODIFIED=${OUTPUT}_modified.geojson
 OUTPUT_MBTILE=${OUTPUT}.mbtiles
@@ -115,7 +118,7 @@ echo Number of features in composite: ${n}
 
 echo Adding tippecanoe extension...
 set -o xtrace
-node scripts/geojson-modifier.js \
+nodejs scripts/geojson-modifier.js \
     --infile ${OUTPUT_JSON} \
     --tippecanoe_extensions '[{ "maxzoom": "maxzoom", "minzoom": "minzoom"}]' \
     --maxzoom_limit ${MINZOOM} \
