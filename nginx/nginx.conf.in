@@ -19,11 +19,10 @@ http {
     listen 8134 default_server;
 
     location /maputnik {
-      default_type "text/html";
-      alias ${maputnik_root}/index.html;
+      proxy_pass                          http://localhost:8010;
     }
-    location /maputnik/ {
-      alias ${maputnik_root}/;
+    location /gatekeeper {
+      proxy_pass                          http://localhost:8011;
     }
     location /checker {
       access_log   off;
