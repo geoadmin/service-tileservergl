@@ -19,15 +19,11 @@ http {
     listen 8134 default_server;
     add_header 'Access-Control-Allow-Origin' '*';
 
-    location /maputnik {
-      proxy_pass                          http://localhost:8010;
+    location /editor/ {
+      proxy_pass                          http://localhost:8010/;
     }
-    location /editor {
-      rewrite ^/editor/ / break;
-      proxy_pass                          http://localhost:8010;
-    }
-    location /gatekeeper {
-      proxy_pass                          http://localhost:8011;
+    location /gatekeeper/ {
+      proxy_pass                          http://localhost:8011/;
     }
     location /checker {
       access_log   off;
