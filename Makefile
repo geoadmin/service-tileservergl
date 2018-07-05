@@ -8,7 +8,6 @@ CURRENT_DIR = $(shell pwd)
 PYTHON_DIR = .venv
 NODE_DIR = node_modules
 SUBMODULE_DIR = tileserver-gl
-MAPUTNIK_ROOT = ${CURRENT_DIR}/maputnik-editor
 MAKO_CMD = ${PYTHON_DIR}/bin/mako-render
 PIP_CMD = ${PYTHON_DIR}/bin/pip
 
@@ -70,7 +69,7 @@ docker-compose.yml::
 	source rc_user && ${MAKO_CMD} --var "rancher_deploy=${RANCHER_DEPLOY}" --var "ci=${CI}" --var "image_tag=${IMAGE_TAG}" docker-compose.yml.in > $@
 
 nginx/nginx.conf::
-	source rc_user && ${MAKO_CMD} --var "maputnik_root=${MAPUTNIK_ROOT}" nginx/nginx.conf.in > $@
+	source rc_user && ${MAKO_CMD} nginx/nginx.conf.in > $@
 
 define start_service
 	rancher --access-key $1 --secret-key $2 --url $3 rm --stop --type stack service-tileservergl-$4 || echo "Nothing to remove"
