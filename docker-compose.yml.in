@@ -17,7 +17,6 @@ services:
     depends_on:
     - tileserver-gl
     labels:
-      #io.rancher.scheduler.affinity:host_label: application=general,staging=dev
       io.rancher.scheduler.affinity:host_label: application=tod,staging=dev
       io.rancher.container.pull_image: always
       io.rancher.scheduler.global: 'true'
@@ -48,7 +47,6 @@ services:
     network_mode: 'host'
 % endif
     labels:
-      #io.rancher.scheduler.affinity:host_label: application=general,staging=dev
       io.rancher.scheduler.affinity:host_label: application=tod,staging=dev
       io.rancher.container.pull_image: always
       io.rancher.scheduler.global: 'true'

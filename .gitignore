@@ -6,3 +6,4 @@ nginx/nginx.conf
 sample/boundaries.geojson
 sample/boundaries.mbtiles
 sample/boundaries_modified.geojson
+package-lock.json
