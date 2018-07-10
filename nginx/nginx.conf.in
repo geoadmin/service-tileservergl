@@ -17,7 +17,7 @@ http {
 
   server {
     listen 8134 default_server;
-    add_header 'Access-Control-Allow-Origin' '*';
+#    add_header 'Access-Control-Allow-Origin' '*';
 
     location /editor/ {
       proxy_pass                          http://localhost:8010/;
