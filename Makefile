@@ -19,6 +19,7 @@ help:
 	@echo "- dockerbuild          Builds all images via docker-compose"
 	@echo "- dockerrun            Launches all the containers for the service"
 	@echo "- dockerpurge          Remove all docker related docker containers and images"
+	@echo "- dockerpushstaging    Push locally builded 'staging' images to dockerhub"
 	@echo "- rancherdeploydev     Deploys the app to Rancher"
 	@echo "- clean                Remove generated templates"
 	@echo "- cleanall             Remove all build artefacts"
@@ -90,3 +91,18 @@ clean:
 cleanall: clean
 	rm -rf ${PYTHON_DIR}
 	rm -rf ${NODE_DIR}
+
+.PHONY: dockerpushstaging
+dockerpushstaging:
+	$(call docker_push,swisstopo/nginx-tileserver-gl:staging)
+	$(call docker_push,swisstopo/tileserver-gl:staging)
+
+# push to dockerhub
+define docker_push
+        @if test "$(shell docker images $1 | grep `echo $1 | awk -F ':' '{print $$2}'` )" != ""; then \
+                docker push $1; \
+        else \
+                echo "there is no image called $1"; exit 1; \
+        fi
+endef
+
