@@ -21,6 +21,8 @@ services:
       io.rancher.container.pull_image: always
       io.rancher.scheduler.global: 'true'
   tileserver-gl:
+    env_file:
+    - ${staging}.env
     image: swisstopo/tileserver-gl:staging
 % if rancher_deploy == 'false' and ci == 'false':
     build: tileserver-gl/
@@ -42,7 +44,7 @@ services:
     - -l
     - -s
     volumes:
-    - /var/local/efs-dev/vectortiles:/var/local/efs-dev/vectortiles
+    - /var/local/efs-${staging}/vectortiles:/var/local/efs-${staging}/vectortiles
 % if ci == 'false':
     network_mode: 'host'
 % endif
