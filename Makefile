@@ -3,7 +3,7 @@ SHELL = /bin/bash
 CI ?= false
 RANCHER_DEPLOY ?= false
 IMAGE_TAG ?= staging
-STAGING ?= int
+STAGING ?= dev
 
 CURRENT_DIR = $(shell pwd)
 PYTHON_DIR = .venv
