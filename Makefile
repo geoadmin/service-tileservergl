@@ -3,6 +3,7 @@ SHELL = /bin/bash
 CI ?= false
 RANCHER_DEPLOY ?= false
 IMAGE_TAG ?= staging
+STAGING ?= int
 
 CURRENT_DIR = $(shell pwd)
 PYTHON_DIR = .venv
@@ -32,15 +33,39 @@ user: ${PYTHON_DIR}/requirements.timestamp ${NODE_DIR}/package.timestamp
 dockerbuild:
 	export RANCHER_DEPLOY=false && make docker-compose.yml && docker-compose build
 
+.PHONY: dockerbuildprod
+dockerbuildprod:
+	export STAGING=prod && make dockerbuild
+	
+.PHONY: dockerbuildint
+dockerbuildint:
+	export STAGING=int && make dockerbuild
+
+.PHONY: dockerbuilddev
+dockerbuilddev:
+	export STAGING=dev && make dockerbuild
+
 .PHONY: dockerrun
 dockerrun:
 	export RANCHER_DEPLOY=false && make docker-compose.yml && docker-compose up -d
+
+.PHONY: dockerrunprod
+dockerrunprod:
+	export STAGING=prod && make dockerrun
+
+.PHONY: dockerrunint
+dockerrunint:
+	export STAGING=int && make dockerrun
+
+.PHONY: dockerrundev
+dockerrundev:
+	export STAGING=dev && make dockerrun
 
 .PHONY: rancherdeploydev
 rancherdeploydev: guard-RANCHER_ACCESS_KEY \
                   guard-RANCHER_SECRET_KEY \
                   guard-RANCHER_URL
-	export RANCHER_DEPLOY=true && make docker-compose.yml
+	export RANCHER_DEPLOY=true && export STAGING=dev && make docker-compose.yml
 	$(call start_service,$(RANCHER_ACCESS_KEY),$(RANCHER_SECRET_KEY),$(RANCHER_URL),dev)
 
 .PHONY: dockerpurge
@@ -67,7 +92,7 @@ ${NODE_DIR}/package.timestamp: package.json
 	touch $@
 
 docker-compose.yml::
-	source rc_user && ${MAKO_CMD} --var "rancher_deploy=${RANCHER_DEPLOY}" --var "ci=${CI}" --var "image_tag=${IMAGE_TAG}" docker-compose.yml.in > $@
+	source rc_user && ${MAKO_CMD} --var "rancher_deploy=${RANCHER_DEPLOY}" --var "ci=${CI}" --var "image_tag=${IMAGE_TAG}" --var staging=${STAGING} docker-compose.yml.in > $@
 
 nginx/nginx.conf::
 	source rc_user && ${MAKO_CMD} nginx/nginx.conf.in > $@
@@ -96,6 +121,14 @@ cleanall: clean
 dockerpushstaging:
 	$(call docker_push,swisstopo/nginx-tileserver-gl:staging)
 	$(call docker_push,swisstopo/tileserver-gl:staging)
+
+.PHONY: dockerpushprod
+dockerpushprod:
+	$(call docker_push,swisstopo/nginx-tileserver-gl:production)
+	$(call docker_push,swisstopo/tileserver-gl:production)
+
+
+
 
 # push to dockerhub
 define docker_push
