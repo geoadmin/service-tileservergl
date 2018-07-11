@@ -35,15 +35,15 @@ dockerbuild:
 
 .PHONY: dockerbuildprod
 dockerbuildprod:
-	export STAGING=prod && make dockerbuild
+	export STAGING=prod && export IMAGE_TAG=production && make dockerbuild
 	
 .PHONY: dockerbuildint
 dockerbuildint:
-	export STAGING=int && make dockerbuild
+	export STAGING=int && export IMAGE_TAG=staging && make dockerbuild
 
 .PHONY: dockerbuilddev
 dockerbuilddev:
-	export STAGING=dev && make dockerbuild
+	export STAGING=dev && export IMAGE_TAG=staging && make dockerbuild
 
 .PHONY: dockerrun
 dockerrun:
@@ -51,15 +51,15 @@ dockerrun:
 
 .PHONY: dockerrunprod
 dockerrunprod:
-	export STAGING=prod && make dockerrun
+	export STAGING=prod && export IMAGE_TAG=production && make dockerrun
 
 .PHONY: dockerrunint
 dockerrunint:
-	export STAGING=int && make dockerrun
+	export STAGING=int && export IMAGE_TAG=staging && make dockerrun
 
 .PHONY: dockerrundev
 dockerrundev:
-	export STAGING=dev && make dockerrun
+	export STAGING=dev && export IMAGE_TAG=staging && make dockerrun
 
 .PHONY: rancherdeploydev
 rancherdeploydev: guard-RANCHER_ACCESS_KEY_DEV \
