@@ -6,7 +6,7 @@ services:
     build: nginx/
 % endif
     ports:
-    - ${nginx_port}:${nginx_port}
+    - '8134:8134'
     command:
     - nginx
     - -g
@@ -28,7 +28,7 @@ services:
     build: tileserver-gl/
 % endif
     ports:
-    - ${tileserver_port}:${tileserver_port}
+    - '8135:8135'
     command:
     - xvfb-run
     - -a
@@ -38,7 +38,7 @@ services:
     - node
     - /usr/src/app/
     - -p
-    - ${tileserver_port}
+    - '8135'
     - -c
     - /usr/src/app/tileserver-gl-config.json
     - -l

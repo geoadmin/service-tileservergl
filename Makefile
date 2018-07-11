@@ -72,14 +72,14 @@ rancherdeploydev: guard-RANCHER_ACCESS_KEY_DEV \
 rancherdeployprod: guard-RANCHER_ACCESS_KEY_PROD \
 		  guard-RANCHER_SECRET_KEY_PROD \
                   guard-RANCHER_URL_PROD
-	export RANCHER_DEPLOY=true && export STAGING=prod && IMAGE_TAG=production && make docker-compose.yml
+	export RANCHER_DEPLOY=true && export STAGING=prod && export IMAGE_TAG=production && make docker-compose.yml
 	$(call start_service,$(RANCHER_ACCESS_KEY_PROD),$(RANCHER_SECRET_KEY_PROD),$(RANCHER_URL_PROD),prod)
 
 .PHONY: rancherdeployint
 rancherdeployint: guard-RANCHER_ACCESS_KEY_DEV \
                   guard-RANCHER_SECRET_KEY_DEV \
                   guard-RANCHER_URL_DEV
-	export RANCHER_DEPLOY=true && export STAGING=int && IMAGE_TAG=integration && make docker-compose.yml
+	export RANCHER_DEPLOY=true && export STAGING=int && export IMAGE_TAG=integration && make docker-compose.yml
 	$(call start_service,$(RANCHER_ACCESS_KEY_DEV),$(RANCHER_SECRET_KEY_DEV),$(RANCHER_URL_DEV),int)
 
 
@@ -149,8 +149,8 @@ cleanall: clean
 	rm -rf ${PYTHON_DIR}
 	rm -rf ${NODE_DIR}
 
-.PHONY: dockerpushstaging
-dockerpushstaging:
+.PHONY: dockerpushdev
+dockerpushdev:
 	export IMAGE_TAG=staging && make dockerpush
 
 .PHONY: dockerpushprod
