@@ -23,7 +23,7 @@ services:
   tileserver-gl:
     env_file:
     - ${staging}.env
-    image: swisstopo/tileserver-gl:staging
+    image: swisstopo/tileserver-gl:${image_tag}
 % if rancher_deploy == 'false' and ci == 'false':
     build: tileserver-gl/
 % endif
