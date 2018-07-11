@@ -6,7 +6,7 @@ services:
     build: nginx/
 % endif
     ports:
-    - '8134:8134'
+    - ${nginx_port}:${nginx_port}
     command:
     - nginx
     - -g
@@ -17,7 +17,7 @@ services:
     depends_on:
     - tileserver-gl
     labels:
-      io.rancher.scheduler.affinity:host_label: application=tod,staging=dev
+      io.rancher.scheduler.affinity:host_label: application=tod,staging=${staging}
       io.rancher.container.pull_image: always
       io.rancher.scheduler.global: 'true'
   tileserver-gl:
@@ -28,7 +28,7 @@ services:
     build: tileserver-gl/
 % endif
     ports:
-    - '8135:8135'
+    - ${tileserver_port}:${tileserver_port}
     command:
     - xvfb-run
     - -a
@@ -38,7 +38,7 @@ services:
     - node
     - /usr/src/app/
     - -p
-    - '8135'
+    - ${tileserver_port}
     - -c
     - /usr/src/app/tileserver-gl-config.json
     - -l
@@ -49,6 +49,6 @@ services:
     network_mode: 'host'
 % endif
     labels:
-      io.rancher.scheduler.affinity:host_label: application=tod,staging=dev
+      io.rancher.scheduler.affinity:host_label: application=tod,staging=${staging}
       io.rancher.container.pull_image: always
       io.rancher.scheduler.global: 'true'
