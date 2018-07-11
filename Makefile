@@ -76,7 +76,7 @@ rancherdeployprod: guard-RANCHER_ACCESS_KEY_PROD \
 	$(call start_service,$(RANCHER_ACCESS_KEY_PROD),$(RANCHER_SECRET_KEY_PROD),$(RANCHER_URL_PROD),prod)
 
 .PHONY: rancherdeployint
-rancherdeployprod: guard-RANCHER_ACCESS_KEY_DEV \
+rancherdeployint: guard-RANCHER_ACCESS_KEY_DEV \
                   guard-RANCHER_SECRET_KEY_DEV \
                   guard-RANCHER_URL_DEV
 	export RANCHER_DEPLOY=true && export STAGING=int && IMAGE_TAG=integration && make docker-compose.yml
@@ -92,11 +92,25 @@ dockerpurge:
 		sudo docker rm -f $(shell sudo docker ps -a -q --filter name=servicetileservergl); \
 	fi
 	@if test "$(shell docker images -q swisstopo/tileserver-gl)" != ""; then \
-		sudo docker rmi -f swisstopo/tileserver-gl:staging; \
+		sudo docker rmi -f swisstopo/tileserver-gl:${IMAGE_TAG}; \
 	fi
 	@if test "$(shell docker images -q swisstopo/nginx-tileserver-gl)" != ""; then \
-		sudo docker rmi -f swisstopo/nginx-tileserver-gl:staging; \
+		sudo docker rmi -f swisstopo/nginx-tileserver-gl:${IMAGE_TAG}; \
 	fi
+
+.PHONY: dockerpurgedev
+dockerpurgedev:
+	export IMAGE_TAG=staging && make dockerpurge
+
+.PHONY: dockerpurgeint
+dockerpurgeint:
+	export IMAGE_TAG=integration && make dockerpurge
+
+.PHONY: dockerpurgeprod
+dockerpurgeprod:
+	export IMAGE_TAG=production && make dockerpurge
+
+
 
 ${PYTHON_DIR}:
 	virtualenv ${PYTHON_DIR}
@@ -137,13 +151,20 @@ cleanall: clean
 
 .PHONY: dockerpushstaging
 dockerpushstaging:
-	$(call docker_push,swisstopo/nginx-tileserver-gl:staging)
-	$(call docker_push,swisstopo/tileserver-gl:staging)
+	export IMAGE_TAG=staging && make dockerpush
 
 .PHONY: dockerpushprod
 dockerpushprod:
-	$(call docker_push,swisstopo/nginx-tileserver-gl:production)
-	$(call docker_push,swisstopo/tileserver-gl:production)
+	export IMAGE_TAG=production && make dockerpush
+
+.PHONY: dockerpushint
+dockerpushint:
+	export IMAGE_TAG=integration && make dockerpush
+
+.PHONY: dockerpush
+dockerpush:
+	$(call docker_push,swisstopo/nginx-tileserver-gl:${IMAGE_TAG})
+	$(call docker_push,swisstopo/tileserver-gl:${IMAGE_TAG})
 
 
 
