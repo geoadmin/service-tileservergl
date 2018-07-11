@@ -39,7 +39,7 @@ dockerbuildprod:
 	
 .PHONY: dockerbuildint
 dockerbuildint:
-	export STAGING=int && export IMAGE_TAG=staging && make dockerbuild
+	export STAGING=int && export IMAGE_TAG=integration && make dockerbuild
 
 .PHONY: dockerbuilddev
 dockerbuilddev:
@@ -65,16 +65,22 @@ dockerrundev:
 rancherdeploydev: guard-RANCHER_ACCESS_KEY_DEV \
                   guard-RANCHER_SECRET_KEY_DEV \
                   guard-RANCHER_URL_DEV
-	export RANCHER_DEPLOY=true && export STAGING=dev && make docker-compose.yml
+	export RANCHER_DEPLOY=true && export STAGING=dev && export IMAGE_TAG=staging && make docker-compose.yml
 	$(call start_service,$(RANCHER_ACCESS_KEY_DEV),$(RANCHER_SECRET_KEY_DEV),$(RANCHER_URL_DEV),dev)
 
 .PHONY: rancherdeployprod
 rancherdeployprod: guard-RANCHER_ACCESS_KEY_PROD \
 		  guard-RANCHER_SECRET_KEY_PROD \
                   guard-RANCHER_URL_PROD
-	export RANCHER_DEPLOY=true && export STAGING=dev && make docker-compose.yml
+	export RANCHER_DEPLOY=true && export STAGING=prod && IMAGE_TAG=production && make docker-compose.yml
 	$(call start_service,$(RANCHER_ACCESS_KEY_PROD),$(RANCHER_SECRET_KEY_PROD),$(RANCHER_URL_PROD),prod)
 
+.PHONY: rancherdeployint
+rancherdeployprod: guard-RANCHER_ACCESS_KEY_DEV \
+                  guard-RANCHER_SECRET_KEY_DEV \
+                  guard-RANCHER_URL_DEV
+	export RANCHER_DEPLOY=true && export STAGING=int && IMAGE_TAG=integration && make docker-compose.yml
+	$(call start_service,$(RANCHER_ACCESS_KEY_DEV),$(RANCHER_SECRET_KEY_DEV),$(RANCHER_URL_DEV),int)
 
 
 
