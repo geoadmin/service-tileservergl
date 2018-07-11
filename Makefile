@@ -62,11 +62,23 @@ dockerrundev:
 	export STAGING=dev && make dockerrun
 
 .PHONY: rancherdeploydev
-rancherdeploydev: guard-RANCHER_ACCESS_KEY \
-                  guard-RANCHER_SECRET_KEY \
-                  guard-RANCHER_URL
+rancherdeploydev: guard-RANCHER_ACCESS_KEY_DEV \
+                  guard-RANCHER_SECRET_KEY_DEV \
+                  guard-RANCHER_URL_DEV
 	export RANCHER_DEPLOY=true && export STAGING=dev && make docker-compose.yml
-	$(call start_service,$(RANCHER_ACCESS_KEY),$(RANCHER_SECRET_KEY),$(RANCHER_URL),dev)
+	$(call start_service,$(RANCHER_ACCESS_KEY_DEV),$(RANCHER_SECRET_KEY_DEV),$(RANCHER_URL_DEV),dev)
+
+.PHONY: rancherdeployprod
+rancherdeployprod: guard-RANCHER_ACCESS_KEY_PROD \
+		  guard-RANCHER_SECRET_KEY_PROD \
+                  guard-RANCHER_URL_PROD
+	export RANCHER_DEPLOY=true && export STAGING=dev && make docker-compose.yml
+	$(call start_service,$(RANCHER_ACCESS_KEY_PROD),$(RANCHER_SECRET_KEY_PROD),$(RANCHER_URL_PROD),prod)
+
+
+
+
+
 
 .PHONY: dockerpurge
 dockerpurge:
