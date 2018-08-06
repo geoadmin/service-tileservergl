@@ -1,7 +1,7 @@
 version: '2'
 services:
   nginx:
-    image: swisstopo/nginx-tileserver-gl:${image_tag}
+    image: swisstopo/${image_base_name}-nginx:${environment}
 % if rancher_deploy == 'false':
     build: nginx/
 % endif
@@ -21,7 +21,7 @@ services:
       io.rancher.container.pull_image: always
       io.rancher.scheduler.global: 'true'
   tileserver-gl:
-    image: swisstopo/tileserver-gl:staging
+    image: swisstopo/${image_base_name}:${environment}
 % if rancher_deploy == 'false' and ci == 'false':
     build: tileserver-gl/
 % endif
