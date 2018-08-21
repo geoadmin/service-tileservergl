@@ -96,9 +96,9 @@ $ ./scripts/process-tilesets.sh --inputs="sample/swissboundaries_gemeinde_3857.j
 This will create 3 files.
 
 ```bash
-Composite JSON: sample/boundaries.geojson
-Modified JSON: sample/boundaries_modified.geojson
-Composite MBTile: sample/boundaries.mbtiles
+Composite JSON: sample/boundaries/[timestamp]/tiles.geojson
+Modified JSON: sample/boundaries/[timestamp]/tiles_modified.geojson
+Composite MBTile: sample/boundaries/[timestamp]/tiles.mbtiles
 ```
 
 - The combined or composite GeoJSON (step 1)
@@ -116,28 +116,21 @@ Make sure your ssh identity has been forwarded.
 ```bash
 $ ssh-add -L
 ```
+Remove the intermediary files
+
+```bash
+rm sample/boundaries/[timestamp]/tiles.geojson sample/boundaries/[timestamp]/tiles_modified.geojson
+```
 
 Add the newly created tileset to [EFS](https://aws.amazon.com/efs/?nc1=h_ls).
 
 ```bash
-$ scp sample/boundaries.mbtiles geodata@${SERVER}:/var/local/efs-dev/vector-forge/swisstopo-tiles
+$ scp -r sample/boundaries/ geodata@${SERVER}:/var/local/efs-dev/vectortiles/mbtiles/boundaries/
 ```
 
 #### 2 Add the new tileset in tileserver-gl
 
-Edit `tileserver-gl/tileserver-gl-config.json` and add a new entry in data. (dataID -> tilesetName)
-
-```json
-...
-  "data": {
-    "boundaries-test": {
-      "mbtiles": "boundaries.mbtiles"
-    }
-...
-```
-
-- `boundaries-test` is the id of the data `${dataID}`
-- `boundaries.mbtiles` is the name of the mbtiles file
+There is no need to add the configuration manually. Whenever you start the server, it will update the configuration automatically.
 
 #### 3 Test the new server configuration locally
 
