@@ -148,43 +148,15 @@ You can collect metdata about the tileset using the following REST endpoint: `/d
 
 ### Publish a new style in tileserver-gl
 
-#### 1 Add a new style entry in tileserver-gl
+#### 1 Add your new or updated style in the config-tileserver-gl github repository.
 
 Styles are base on [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-js/style-spec/)
 
-Insert a new entry in "styles" in `tileserver-gl/tileserver-gl-config.json`.
+Styles in the config-tileserver-gl repository are meant to be deployed by a script within that repository. After adding your style, run the script (read the doc in config-tileserver-gl to know how) and it will be part of the availables styles in the EFS.
 
-```json
-...
-  "styles": {
-    "boundaries-test": {
-      "style": "boundaries_style.json",
-      "server_rendered": true,
-      "tilejson": {
-        "bounds": [
-          6,
-          43,
-          11,
-          51
-        ]
-      }
-...
-```
+Besides, if your style is present in the EFS, when running the project, the configuration will automatically include your new script.
 
-- `boundaries-test` is the id of the style `${styleID}`
-- `style` is the name of the style file
-- `server_rendered` is the option that lets you turn on/off the backend rasterization.
-- `bounds` tells tileserver-gl what initial bounds you want to use.
-
-#### 2 Add a new style file to EFS
-
-For demonstration purposes a simple style is provided in `sample/boundaries_style.json`.
-
-```bash
-$ scp sample/boundaries_style.json geodata@${SERVER}:/var/local/efs-dev/vector-forge/swisstopo-styles
-```
-
-#### 3 Test the new server configuration locally
+#### 2 Test the new server configuration locally
 
 ```bash
 $ make dockerpurge dockerrun
@@ -192,15 +164,7 @@ $ make dockerpurge dockerrun
 
 Open your browser at `localhost:8135`. In the section **STYLES** you should now see the `Test Swiss Boundaries` entry.
 
-You can access the new style using the following REST endpoint: `/styles/boundaries-test/style.json` (`/styles/${styleID}/style.json`)
-
-**Tip**: when you just want to update a GL style and containers are already running.
-
-```bash
-$ scp sample/boundaries_style.json geodata@${SERVER}:/var/local/efs-dev/vector-forge/swisstopo-styles
-$ docker-compose down
-$ docker-compose up -d
-```
+You can access the new style using the following REST endpoint: `/styles/style_name/version/style.json` (`/styles/${styleID}/${styleVersion}/style.json`)
 
 ## Update Maputnik
 
